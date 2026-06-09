@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Title tag for SEO and browser tab -->
+    <title>Social Media Hashtag Extraction using Naive String Matching Algorithm</title>
+    <meta name="description" content="An interactive educational web application showcasing hashtag extraction using the Naive String Matching algorithm with step-by-step visual animation and Chart.js analytics.">
+    <!-- Custom Style Sheet -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts: Plus Jakarta Sans for premium typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Lucide Icons for clean, modern interface elements -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Chart.js for beautiful, responsive visualization charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Main Premium Dark Background and Layout -->
+    <div class="app-container">
+        
+        <!-- TOP NAVIGATION HEADER WITH TYPEWRITER TITLE -->
+        <header class="main-header glass-card">
+            <div class="header-logo">
+                <i data-lucide="hash" class="pulse-icon logo-icon"></i>
+                <div class="title-container">
+                    <!-- The typewriter animation will target this header -->
+                    <h1 id="typewriter-title" class="typewriter">Hashtag Extractor</h1>
+                    <p class="subtitle">Naive String Matching Visualizer</p>
+                </div>
+            </div>
+            <div class="header-badge">
+                <span class="badge-dot"></span>
+                <span>DAA Project presentation</span>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT LAYOUT -->
+        <main class="content-scrollable">
+
+                <!-- SECTION A: PROBLEM STATEMENT -->
+                <section id="problem-statement" class="content-section">
+                    <div class="section-card glass-card">
+                        <div class="section-badge"><i data-lucide="file-question"></i> SECTION A</div>
+                        <h2 class="section-title">Problem Statement</h2>
+                        
+                        <div class="problem-statement-grid">
+                            <div class="problem-text">
+                                <p class="highlight-lead">
+                                    Social media platforms process millions of posts per second. To extract trending topics, group conversations, or track sentiment, analytics engines must isolate specific <strong>hashtags (#)</strong> within user tweets.
+                                </p>
+                                <p>
+                                    This application demonstrates how a social media analytics tool locates all occurrences of a designated hashtag pattern inside a raw body of text (tweet) using the fundamental <strong>Naive String Matching Algorithm</strong> (also known as the Brute-Force String Search).
+                                </p>
+                                <div class="example-box">
+                                    <div class="example-label">Visual Example:</div>
+                                    <div class="example-item">
+                                        <span class="item-title">Tweet:</span>
+                                        <code class="item-code">"Loving the weather today! #sunny #vacation #sunny"</code>
+                                    </div>
+                                    <div class="example-item">
+                                        <span class="item-title">Pattern to Match:</span>
+                                        <code class="item-code accent-code">"#sunny"</code>
+                                    </div>
+                                    <div class="example-item">
+                                        <span class="item-title">Expected Result:</span>
+                                        <div class="item-res-badge">
+                                            <span>Found at positions: <strong>26</strong> and <strong>45</strong></span>
+                                            <span class="separator">|</span>
+                                            <span>Total Occurrences: <strong>2</strong></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="problem-illustration">
+                                <div class="glass-mini-card float-anim">
+                                    <div class="tweet-mock">
+                                        <div class="tweet-header">
+                                            <div class="avatar"></div>
+                                            <div class="user-info">
+                                                <span class="name">SocialAnalytics_Bot</span>
+                                                <span class="handle">@analytics_engine</span>
+                                            </div>
+                                        </div>
+                                        <div class="tweet-body">
+                                            Loving the weather today! <span class="highlight-tag">#sunny</span> #vacation <span class="highlight-tag">#sunny</span>
+                                        </div>
+                                        <div class="tweet-footer">
+                                            <i data-lucide="heart" class="icon-sm text-red"></i><span>4.8k</span>
+                                            <i data-lucide="message-square" class="icon-sm"></i><span>212</span>
+                                            <i data-lucide="bar-chart-2" class="icon-sm text-violet"></i><span>95.4k</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION B: MATHEMATICAL CONCEPT & PSEUDOCODE -->
+                <section id="mathematical-concept" class="content-section">
+                    <div class="section-card glass-card">
+                        <div class="section-badge"><i data-lucide="binary"></i> SECTION B</div>
+                        <h2 class="section-title">Mathematical Concept</h2>
+                        
+                        <div class="grid-2col">
+                            <!-- Math Explanation Panel -->
+                            <div class="math-explanation">
+                                <p class="highlight-lead">How does Naive String Matching work mathematically?</p>
+                                <p>
+                                    Let the Tweet text be represented as an array $T[0\dots n-1]$ of length $n$, and the Hashtag Pattern to be searched as an array $P[0\dots m-1]$ of length $m$.
+                                </p>
+                                <p>
+                                    We align the pattern $P$ at every possible shift $i$ in the text $T$ such that $0 \le i \le n-m$. For each shift $i$, we perform character-by-character comparisons:
+                                </p>
+                                <ul class="math-list">
+                                    <li>
+                                        <i data-lucide="check-circle" class="list-icon text-green"></i>
+                                        <span>Compare $P[j]$ with $T[i + j]$ for $0 \le j < m$.</span>
+                                    </li>
+                                    <li>
+                                        <i data-lucide="arrow-right-circle" class="list-icon text-violet"></i>
+                                        <span>If all characters match, a match is recorded at index $i$.</span>
+                                    </li>
+                                    <li>
+                                        <i data-lucide="x-circle" class="list-icon text-red"></i>
+                                        <span>Upon the first mismatch $T[i + j] \ne P[j]$, the algorithm aborts comparisons for shift $i$ and increments the shift to $i+1$.</span>
+                                    </li>
+                                </ul>
+                                <div class="math-variables">
+                                    <div class="var-badge">n = text.length</div>
+                                    <div class="var-badge accent">m = pattern.length</div>
+                                    <div class="var-badge">Range: 0 to n - m</div>
+                                </div>
+                            </div>
+
+                            <!-- Pseudocode Panel -->
+                            <div class="pseudocode-panel">
+                                <div class="panel-header">
+                                    <i data-lucide="code-2"></i>
+                                    <span>Algorithm Pseudocode</span>
+                                </div>
+                                <div class="panel-body">
+                                    <pre class="pseudo-code-block">
+<code><span class="ps-keyword">Algorithm</span> NaiveStringMatcher(Text T, Pattern P)
+    n = T.length
+    m = P.length
+    
+    <span class="ps-keyword">for</span> i = 0 <span class="ps-keyword">to</span> n - m
+        j = 0
+        <span class="ps-keyword">while</span> j < m <span class="ps-keyword">and</span> T[i + j] == P[j]
+            j = j + 1
+            
+        <span class="ps-keyword">if</span> j == m
+            <span class="ps-keyword">print</span> "Pattern occurs with shift " + i
+    <span class="ps-keyword">end for</span></code>
+                                    </pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION C: ALGORITHM VISUALIZATION -->
+                <section id="algorithm-visualization" class="content-section">
+                    <div class="section-card glass-card">
+                        <div class="section-badge"><i data-lucide="eye"></i> SECTION C</div>
+                        <h2 class="section-title">Algorithm Visualization</h2>
+
+                        <!-- 1. INPUT FORMS & CONTROLS -->
+                        <div class="visualizer-inputs">
+                            <div class="input-group">
+                                <label for="tweet-input">Tweet Input Text (Text)</label>
+                                <textarea id="tweet-input" placeholder="Enter social media tweet here..." rows="3">Loving the weather today! #sunny #vacation #sunny</textarea>
+                            </div>
+                            <div class="input-group-row">
+                                <div class="input-group">
+                                    <label for="pattern-input">Hashtag Pattern (Pattern)</label>
+                                    <input type="text" id="pattern-input" value="#sunny" placeholder="e.g. #sunny">
+                                </div>
+                                <div class="visualizer-actions">
+                                    <button id="btn-start" class="btn btn-primary">
+                                        <i data-lucide="play"></i> <span>Start Extraction</span>
+                                    </button>
+                                    <button id="btn-reset" class="btn btn-secondary">
+                                        <i data-lucide="rotate-ccw"></i> <span>Reset</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. ANIMATION AND INTERACTIVE CONTROL PANEL -->
+                        <div class="animation-controls glass-card-nested">
+                            <div class="control-buttons">
+                                <button id="btn-prev-step" class="btn-icon" title="Step Backward" disabled>
+                                    <i data-lucide="skip-back"></i>
+                                </button>
+                                <button id="btn-play-pause" class="btn-icon play-btn" title="Play/Pause" disabled>
+                                    <i data-lucide="play" id="play-pause-icon"></i>
+                                </button>
+                                <button id="btn-stop-visualizer" class="btn-icon" title="Stop & Reset" disabled>
+                                    <i data-lucide="square"></i>
+                                </button>
+                                <button id="btn-next-step" class="btn-icon" title="Step Forward" disabled>
+                                    <i data-lucide="skip-forward"></i>
+                                </button>
+                            </div>
+                            <div class="speed-slider-container">
+                                <label for="speed-slider"><i data-lucide="gauge"></i> Speed</label>
+                                <input type="range" id="speed-slider" min="100" max="2000" value="800" step="100">
+                                <span id="speed-value">800ms</span>
+                            </div>
+                            <div class="status-indicator">
+                                <span class="indicator-label">Index i:</span>
+                                <span id="idx-i-val" class="indicator-val">0</span>
+                                <span class="separator">|</span>
+                                <span class="indicator-label">Index j:</span>
+                                <span id="idx-j-val" class="indicator-val">0</span>
+                            </div>
+                        </div>
+
+                        <!-- 3. VISUALIZATION CANVAS (TWEET AND PATTERN GRID) -->
+                        <div class="visualization-canvas">
+                            <div class="visualizer-scroll-viewport">
+                                <!-- Helper hints -->
+                                <div class="canvas-indices" id="canvas-indices-row">
+                                    <!-- Generated by JS dynamically -->
+                                </div>
+
+                                <!-- Text Row Grid -->
+                                <div class="canvas-row text-row">
+                                    <div class="row-label">Tweet (T)</div>
+                                    <div class="tiles-wrapper" id="tweet-tiles-container">
+                                        <!-- Tweet tiles generated by JS -->
+                                        <div class="placeholder-text-msg">Enter input above and click "Start Extraction" to visualize!</div>
+                                    </div>
+                                </div>
+
+                                <!-- Pattern Row Grid (Translates horizontally) -->
+                                <div class="canvas-row pattern-row">
+                                    <div class="row-label">Pattern (P)</div>
+                                    <div class="tiles-wrapper" id="pattern-tiles-container">
+                                        <!-- Pattern tiles generated by JS -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4. STEP EXPLANATION & LIVE LOGGER -->
+                        <div class="visualization-logger-grid">
+                            <div class="step-explanation glass-card-nested">
+                                <div class="info-header text-violet">
+                                    <i data-lucide="info"></i> Current Action Status
+                                </div>
+                                <div class="info-body" id="current-step-explanation">
+                                    Click "Start Extraction" to begin the step-by-step Naive String Matching visualization.
+                                </div>
+                            </div>
+                            <div class="live-console-log glass-card-nested">
+                                <div class="info-header text-indigo">
+                                    <i data-lucide="terminal"></i> Step-by-Step Execution Log
+                                </div>
+                                <div class="console-wrapper" id="console-logs">
+                                    <div class="console-line system-msg">Console ready. Awaiting search start...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- OUTPUT DISPLAY SECTION -->
+                <section id="output-display" class="content-section">
+                    <div class="section-card glass-card">
+                        <div class="section-badge"><i data-lucide="arrow-right-circle"></i> OUTPUT</div>
+                        <h2 class="section-title">Extraction Output</h2>
+                        
+                        <div class="output-container">
+                            <!-- Output Status Panel -->
+                            <div class="output-status glass-card-nested">
+                                <div class="status-header">
+                                    <i data-lucide="circle-check" class="status-icon" id="output-status-icon"></i>
+                                    <div class="status-text">
+                                        <span class="status-title" id="output-status-title">Ready to Extract</span>
+                                        <span class="status-desc" id="output-status-desc">Run the extraction above to see results</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Output Results Grid -->
+                            <div class="output-results-grid">
+                                <!-- Search Summary -->
+                                <div class="output-result-card">
+                                    <h3 class="result-card-title">
+                                        <i data-lucide="search"></i> Search Summary
+                                    </h3>
+                                    <div class="result-item">
+                                        <span class="result-label">Text Searched:</span>
+                                        <span class="result-value" id="output-text-searched">-</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">Pattern:</span>
+                                        <span class="result-value accent" id="output-pattern">-</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">Total Matches:</span>
+                                        <span class="result-value highlight" id="output-match-count">0</span>
+                                    </div>
+                                </div>
+
+                                <!-- Match Positions -->
+                                <div class="output-result-card">
+                                    <h3 class="result-card-title">
+                                        <i data-lucide="map-pin"></i> Match Positions
+                                    </h3>
+                                    <div class="positions-list" id="output-positions">
+                                        <span class="no-data">No matches found</span>
+                                    </div>
+                                </div>
+
+                                <!-- Extracted Hashtags -->
+                                <div class="output-result-card">
+                                    <h3 class="result-card-title">
+                                        <i data-lucide="hash"></i> Extracted Hashtags
+                                    </h3>
+                                    <div class="hashtags-list" id="output-hashtags">
+                                        <span class="no-data">No hashtags extracted</span>
+                                    </div>
+                                </div>
+
+                                <!-- Performance Metrics -->
+                                <div class="output-result-card">
+                                    <h3 class="result-card-title">
+                                        <i data-lucide="zap"></i> Performance Metrics
+                                    </h3>
+                                    <div class="result-item">
+                                        <span class="result-label">Comparisons:</span>
+                                        <span class="result-value" id="output-comparisons">0</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">Matches:</span>
+                                        <span class="result-value success" id="output-matches">0</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">Mismatches:</span>
+                                        <span class="result-value danger" id="output-mismatches">0</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Output Code Block -->
+                            <div class="output-code-block glass-card-nested">
+                                <div class="code-block-header">
+                                    <i data-lucide="code"></i> JSON Output Format
+                                </div>
+                                <pre id="output-json-block"><code>{
+  "found": false,
+  "text": "",
+  "pattern": "",
+  "matchCount": 0,
+  "positions": [],
+  "comparisons": 0,
+  "matches": 0,
+  "mismatches": 0
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION D: CODE DEMONSTRATION & LIVE TRACER -->
+                <section id="code-demonstration" class="content-section">
+                    <div class="section-card glass-card">
+                        <div class="section-badge"><i data-lucide="code"></i> SECTION D</div>
+                        <h2 class="section-title">Code Demonstration</h2>
+                        <p class="section-desc">
+                            Here is the JavaScript implementation of the Naive String Matching Algorithm. 
+                            When you run or step through the visualizer above, the **active line of code executing is highlighted live** below!
+                        </p>
+                        
+                        <div class="code-tracer-container">
+                            <div class="code-header">
+                                <div class="code-title">
+                                    <span class="file-icon">JS</span>
+                                    <span>script.js - naiveStringSearch()</span>
+                                </div>
+                                <div class="code-actions">
+                                    <span class="live-badge"><span class="ping-dot"></span> Live Tracer Active</span>
+                                </div>
+                            </div>
+                            <div class="code-body">
+                                <div class="code-line-tracer" id="code-line-1">
+                                    <span class="line-num">1</span>
+                                    <span class="line-content"><span class="code-kw">function</span> <span class="code-func">naiveStringSearch</span>(text, pattern) {</span>
+                                </div>
+                                <div class="code-line-tracer" id="code-line-2">
+                                    <span class="line-num">2</span>
+                                    <span class="line-content">    <span class="code-kw">let</span> n = text.length; <span class="code-comment">// Length of the tweet text</span></span>
+                                </div>
+                                <div class="code-line-tracer" id="code-line-3">
+                                    <span class="line-num">3</span>
+                                    <span class="line-content">    <span class="code-kw">let</span> m = pattern.length; <span class="code-comment">// Length of the hashtag pattern</span></span>
+                                </div>
+                                <div class="code-line-tracer" id="code-line-4">
+                                    <span class="line-num">4</span>
+                                    <span class="line-content">    <span class="code-kw">let</span> matches = []; <span class="code-comment">// Array to store index alignments</span></span>
+                                </div>
+                                <div class="code-line-tracer" id="code-line-5">
+                                    <span class="line-num">5</span>
+                                    <span class="line-content">    <span class="code-kw">for</span> (<span class="code-kw">let</span> i = 0; i &lt;= n - m; i++) { <span class="code-comment">// Outer loop: slides pattern over text</span></span>
+                                </div>
+                                <div class="code-line-tracer" id="code-line-6">
+                                    <span class="line-num">6</span>
+                                    <span class="line-content">        <span class="code-kw">let</span> j;</span>
+                                </div>
+                                <div class="code-line-tracer" id="code-line-7">
+                                    <span class="line-num">7</span>
+                                    <span class="line-content">        <span class="code-kw">for</span> (j = 0; j &lt; m; j++) { <span class="code-comment">// Inner loop: compare character-by-character</span></span>
+                                </div>
+                                <div class="code-line-tracer" id="code-line-8">
+                                    <span class="line-num">8</span>
+                                    <span class="line-content">            <span class="code-kw">if</span> (text[i + j] !== pattern[j]) { <span class="code-comment">// Check for mismatch</span></span>
+                                </div>
+                                <div class="code-line-tracer" id="code-line-9">
+                                    <span class="line-num">9</span>
+                                    <span class="line-content">                <span class="code-kw">break</span>; <span class="code-comment">// Mismatch found, shift the pattern</span></span>
+                                </div>
+                                <div class="code-line-tracer" id="code-line-10">
+                                    <span class="line-num">10</span>
+                                    <span class="line-content">            }</span>
+                                </div>
+                                <div class="code-line-tracer" id="code-line-11">
+                                    <span class="line-num">11</span>
+                                    <span class="line-content">        }</span>
+                                </div>
+                                <div class="code-line-tracer" id="code-line-12">
+                                    <span class="line-num">12</span>
+                                    <span class="line-content">        <span class="code-kw">if</span> (j === m) { <span class="code-comment">// If we completed loop, we matched all characters!</span></span>
+                                </div>
+                                <div class="code-line-tracer" id="code-line-13">
+                                    <span class="line-num">13</span>
+                                    <span class="line-content">            matches.push(i); <span class="code-comment">// Record match starting position</span></span>
+                                </div>
+                                <div class="code-line-tracer" id="code-line-14">
+                                    <span class="line-num">14</span>
+                                    <span class="line-content">        }</span>
+                                </div>
+                                <div class="code-line-tracer" id="code-line-15">
+                                    <span class="line-num">15</span>
+                                    <span class="line-content">    }</span>
+                                </div>
+                                <div class="code-line-tracer" id="code-line-16">
+                                    <span class="line-num">16</span>
+                                    <span class="line-content">    <span class="code-kw">return</span> matches; <span class="code-comment">// Returns all match positions</span></span>
+                                </div>
+                                <div class="code-line-tracer" id="code-line-17">
+                                    <span class="line-num">17</span>
+                                    <span class="line-content">}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION E: TIME COMPLEXITY ANALYSIS -->
+                <section id="time-complexity" class="content-section">
+                    <div class="section-card glass-card">
+                        <div class="section-badge"><i data-lucide="clock"></i> SECTION E</div>
+                        <h2 class="section-title">Time Complexity</h2>
+                        <p class="section-desc">
+                            The performance efficiency of the Naive String Matching algorithm measured in Big O notation.
+                        </p>
+
+                        <div class="complexity-cards-grid">
+                            <!-- Card 1: Best Case -->
+                            <div class="complexity-card glass-card-nested hover-lift">
+                                <div class="comp-icon text-green"><i data-lucide="zap"></i></div>
+                                <div class="comp-title">Best Case</div>
+                                <div class="comp-value text-green">O(n)</div>
+                                <div class="comp-desc">
+                                    Occurs when the first character of the pattern does not match the text at all, leading to only 1 comparison per alignment.
+                                    <div class="example-pill">Example: T = "AAAAA", P = "B"</div>
+                                </div>
+                            </div>
+
+                            <!-- Card 2: Average Case -->
+                            <div class="complexity-card glass-card-nested hover-lift">
+                                <div class="comp-icon text-violet"><i data-lucide="bar-chart-2"></i></div>
+                                <div class="comp-title">Average Case</div>
+                                <div class="comp-value text-violet">O(n · m)</div>
+                                <div class="comp-desc">
+                                    Occurs on typical text inputs where partial matches happen occasionally, requiring checking a few characters before shifting.
+                                    <div class="example-pill">Example: Real tweets search</div>
+                                </div>
+                            </div>
+
+                            <!-- Card 3: Worst Case -->
+                            <div class="complexity-card glass-card-nested hover-lift">
+                                <div class="comp-icon text-red"><i data-lucide="alert-triangle"></i></div>
+                                <div class="comp-title">Worst Case</div>
+                                <div class="comp-value text-red">O(n · m)</div>
+                                <div class="comp-desc">
+                                    Occurs when all characters of text and pattern are identical, or match up to the very last character before mismatching.
+                                    <div class="example-pill">Example: T = "AAAAAA", P = "AAAB"</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION F: RESULTS & ANALYTICS -->
+                <section id="results-analysis" class="content-section">
+                    <div class="section-card glass-card">
+                        <div class="section-badge"><i data-lucide="trending-up"></i> SECTION F</div>
+                        <h2 class="section-title">Results & Analysis</h2>
+                        
+                        <!-- Output success notification -->
+                        <div class="results-banner success" id="results-banner">
+                            <i data-lucide="info" id="banner-icon"></i>
+                            <span id="banner-text">Run the extractor above to display results here!</span>
+                        </div>
+
+                        <!-- Statistics Counter Row -->
+                        <div class="results-stats-row">
+                            <div class="stat-card glass-card-nested">
+                                <div class="stat-icon text-violet"><i data-lucide="search"></i></div>
+                                <div class="stat-content">
+                                    <span class="stat-val" id="stat-comparisons">0</span>
+                                    <span class="stat-lbl">Comparisons Made</span>
+                                </div>
+                            </div>
+                            <div class="stat-card glass-card-nested">
+                                <div class="stat-icon text-green"><i data-lucide="check-circle-2"></i></div>
+                                <div class="stat-content">
+                                    <span class="stat-val" id="stat-matches">0</span>
+                                    <span class="stat-lbl">Occurrences Found</span>
+                                </div>
+                            </div>
+                            <div class="stat-card glass-card-nested">
+                                <div class="stat-icon text-red"><i data-lucide="x-circle"></i></div>
+                                <div class="stat-content">
+                                    <span class="stat-val" id="stat-mismatches">0</span>
+                                    <span class="stat-lbl">Mismatches Found</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Analytics Detail and Charts -->
+                        <div class="grid-2col-charts">
+                            
+                            <!-- Matching Analytics Detail Card -->
+                            <div class="analytics-details-card glass-card-nested">
+                                <h3 class="panel-heading"><i data-lucide="clipboard-list"></i> Extraction Details</h3>
+                                <div class="detail-row">
+                                    <span class="detail-label">Match Positions:</span>
+                                    <span class="detail-val" id="detail-positions">-</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Extracted Hashtags:</span>
+                                    <div class="tags-container" id="detail-extracted-tags">
+                                        <span class="no-tags">-</span>
+                                    </div>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Highlight View:</span>
+                                    <div class="tweet-highlight-box" id="tweet-highlighted-view">
+                                        Tweet input text will be highlighted here after matching...
+                                    </div>
+                                </div>
+                                
+                                <div class="export-actions">
+                                    <button id="btn-copy" class="btn btn-secondary">
+                                        <i data-lucide="copy"></i> Copy Results
+                                    </button>
+                                    <button id="btn-download" class="btn btn-secondary">
+                                        <i data-lucide="download"></i> Download TXT
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Chart.js Visualization Canvas -->
+                            <div class="analytics-chart-card glass-card-nested">
+                                <h3 class="panel-heading"><i data-lucide="pie-chart"></i> Visual Analytics</h3>
+                                <div class="chart-container">
+                                    <canvas id="analytics-chart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION G: REAL WORLD APPLICATIONS -->
+                <section id="real-world-applications" class="content-section">
+                    <div class="section-card glass-card">
+                        <div class="section-badge"><i data-lucide="globe"></i> SECTION G</div>
+                        <h2 class="section-title">Real World Applications</h2>
+                        <p class="section-desc">
+                            Why do social media analytics engines need string matching? Let's check the real-world impact.
+                        </p>
+
+                        <div class="applications-grid">
+                            <div class="app-card glass-card-nested">
+                                <div class="app-icon"><i data-lucide="hash" class="text-violet"></i></div>
+                                <h3>What is a Hashtag?</h3>
+                                <p>
+                                    A metadata tag prefaced by the octothorpe symbol (#). It is used on social networks to group messages, index topics, and allow users to search for content of interest.
+                                </p>
+                            </div>
+
+                            <div class="app-card glass-card-nested">
+                                <div class="app-icon"><i data-lucide="trending-up" class="text-green"></i></div>
+                                <h3>Trending Topic Discovery</h3>
+                                <p>
+                                    By scanning millions of tweets per minute for popular hashtags, platforms calculate real-time trending topics. String matching identifies when specific keywords spike in volume.
+                                </p>
+                            </div>
+
+                            <div class="app-card glass-card-nested">
+                                <div class="app-icon"><i data-lucide="message-square" class="text-indigo"></i></div>
+                                <h3>Sentiment & Brand Analytics</h3>
+                                <p>
+                                    Companies scan social feeds for brand mentions (e.g. <code>#BestProduct</code>, <code>#SupportFail</code>). Quick hashtag matching categorizes posts into positive or negative sentiment buckets.
+                                </p>
+                            </div>
+
+                            <div class="app-card glass-card-nested">
+                                <div class="app-icon"><i data-lucide="filter" class="text-red"></i></div>
+                                <h3>Content Filtering & Feeds</h3>
+                                <p>
+                                    Algorithms curate your home feed by matching hashtags inside posts against your topics of interest, delivering customized recommendations instantaneously.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION H: CONCLUSION -->
+                <section id="conclusion" class="content-section">
+                    <div class="section-card glass-card">
+                        <div class="section-badge"><i data-lucide="award"></i> SECTION H</div>
+                        <h2 class="section-title">Conclusion</h2>
+                        
+                        <div class="conclusion-box glass-card-nested">
+                            <p class="highlight-lead">Summary of Findings</p>
+                            <p>
+                                The <strong>Naive String Matching Algorithm</strong> is an excellent conceptual foundation. It requires zero preprocessing and is extremely simple to understand and implement, making it the ideal baseline for string searching.
+                            </p>
+                            <p>
+                                However, for large-scale production analytics where string comparisons must operate in sub-linear time, social networks employ more advanced pattern search algorithms:
+                            </p>
+                            <div class="alternative-grid">
+                                <div class="alt-item">
+                                    <strong>Knuth-Morris-Pratt (KMP)</strong>
+                                    <span>Preprocesses pattern to achieve O(n) time by skipping redundant alignments.</span>
+                                </div>
+                                <div class="alt-item">
+                                    <strong>Rabin-Karp</strong>
+                                    <span>Uses hashing to check multiple matches simultaneously, speeding up average cases.</span>
+                                </div>
+                                <div class="alt-item">
+                                    <strong>Boyer-Moore</strong>
+                                    <span>Matches characters right-to-left and uses shift tables, often matching in sub-linear time.</span>
+                                </div>
+                            </div>
+                            <div class="final-remark">
+                                <p>
+                                    Through this interactive visualizer, we observed how the brute-force method steps character-by-character, demonstrating the exact mechanical cost of comparisons in real-time.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+        </main>
+    </div>
+
+    <!-- Main JS file -->
+    <script src="script.js"></script>
+</body>
+</html>
