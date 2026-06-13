@@ -1,0 +1,1 @@
+This project uses the Naive String Matching Algorithm to find all occurrences of a specific hashtag in a tweet. Developed using HTML, CSS, and JavaScript, it provides an interactive visualization of the matching process, displays results, and analyzes the algorithm's time complexity for social media analytics.
